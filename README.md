@@ -19,14 +19,14 @@ You need to have cURL installed.
 Login as root.  
 Download the script.  
 
-    # curl -L https://github.com/Tirsvad/NvidiaAutoInstallForLinux/tarball/master | tar xz -C /root/ --strip-components 2
+    # curl -L https://github.com/Tirsvad/Linux.NvidiaGpuDriverInstall/tarball/master | tar xz -C /root/ --strip-components 2
 
 Optional change the driver to the one is fitting your display adapter.  
 Optional the password of signing key can be edited in the config.sh file.  
-PASSWORD is at standard set to Secret1234
+PASSWORD is set to Secret1234 and used first time the bios is getting the signing key.
 
     # cd ~/NvidiaAutoInstallForLinux
-    # bash install-nvidia-driver.sh
+    # bash install.sh
 
 It will reboot 2 times in non graphical login.  
 ONLY UEFI: Bios may ask about new key that we created for signing the driver. Load the new key into bios so nvidiadriver can be acceptet.  
