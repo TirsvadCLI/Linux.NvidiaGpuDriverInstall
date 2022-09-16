@@ -4,8 +4,6 @@ ROOT_DIR=$(dirname $(readlink -f $0))
 
 . $ROOT_DIR/config.sh
 
-PASSWORD
-
 # check if running as root
 if [[ $EUID -ne 0 ]]; then
     echo "This script must be run as root."
