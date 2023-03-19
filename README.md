@@ -25,7 +25,7 @@ Optional change the driver to the one is fitting your display adapter.
 Optional the password of signing key can be edited in the config.sh file.  
 PASSWORD is set to Secret1234 and used first time the bios is getting the signing key.
 
-    # cd ~/NvidiaAutoInstallForLinux
+    # cd src/NvidiaGpuDriverInstall
     # bash install.sh
 
 It will reboot 2 times in non graphical login.  
