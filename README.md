@@ -18,18 +18,6 @@ Ensure that `cURL` is installed on your system. If it's not installed, you can d
 # apt -y install curl
 ```
 
-## Package Installation
-- Add Non-Free to Repository:
-    apt-add-repository non-free: Adds the non-free repository necessary for NVIDIA drivers.
-- Install Dependencies:
-    - mokutil
-    - openssl
-    - linux-headers
-    - build-essential
-    - pkg-config
-    - libglvnd-dev
-
-
 ## Install
 
 ### Configuration (Optional)
@@ -42,7 +30,7 @@ You can make changes in the config.sh file
 Login as root.  
 Download the script.  
 
-    # curl -L https://github.com/Tirsvad/Linux.NvidiaGpuDriverInstall/tarball/master | tar xz -C /root/ --strip-components=2
+    # curl -L https://github.com/TirsvadCLI/Linux.NvidiaGpuDriverInstall/tarball/master | tar xz -C /root/ --strip-components=2
 
     # cd cd /root/NvidiaGpuDriverInstall
     # bash install.sh
@@ -53,6 +41,17 @@ Download the script.
 - **For UEFI systems, the BIOS may prompt you to load the new signing key that was created during the installation. Ensure to load this key so that the NVIDIA driver can be accepted.**
 
 Once the installation is complete, the system will reboot and present you with a graphical login interface.
+
+## Package Installation
+- Add Non-Free to Repository:
+    apt-add-repository non-free: Adds the non-free repository necessary for NVIDIA drivers.
+- Install Dependencies:
+    - mokutil
+    - openssl
+    - linux-headers
+    - build-essential
+    - pkg-config
+    - libglvnd-dev
 
 ## Troubleshooting
 
