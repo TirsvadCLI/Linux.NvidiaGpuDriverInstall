@@ -1,10 +1,18 @@
 #!/bin/bash
+# @file
+# @brief Script to automate the installation of NVIDIA drivers on a Debian-based system.
+#
+# This script checks for root privileges, installs necessary packages, 
+# handles UEFI key generation, and manages subsequent installation steps 
+# through temporary systemd services.
 
 ROOT_DIR=$(dirname $(readlink -f $0))
 
+# Include configuration file
 . $ROOT_DIR/config.sh
 
-# check if running as root
+# @brief Check if the script is being run as root.
+# @exit This script must be run as root.
 if [[ $EUID -ne 0 ]]; then
     echo "This script must be run as root."
     exit
@@ -18,10 +26,10 @@ rm -f /usr/local/bin/runonetime-nvidia-installer-step-02.sh
 rm -f /etc/systemd/system/runonetime-nvidia-installer-step-01.service
 rm -f /etc/systemd/system/runonetime-nvidia-installer-step-02.service
 
-# Nvidia is a non-free software
+# @brief Install required packages non-interactively.
 apt-add-repository non-free
 
-# Needed software for this
+# @brief Install required packages non-interactively.
 DEBIAN_FRONTEND=noninteractive apt-get -qq update && apt-get -qq upgrade
 DEBIAN_FRONTEND=noninteractive apt-get -qq install mokutil openssl
 DEBIAN_FRONTEND=noninteractive apt-get -qq install linux-headers-$(uname -r) build-essential
@@ -31,6 +39,7 @@ DEBIAN_FRONTEND=noninteractive apt-get -qq install libglvnd-dev
 cd /root
 FILENAME=$(basename "$DRIVERLINK")
 
+# @brief Download the NVIDIA driver if it does not exist.
 if [ ! -f /root/$FILENAME ]; then
 	curl -LO $DRIVERLINK
 	chmod u+x $FILENAME
@@ -38,8 +47,8 @@ else
 	echo "File Exist: Skiping downloading"
 fi
 
-# uefi self generated key for signing nvidia driver
-# bios prompt for import type the password
+# @brief Generate a UEFI key for signing the NVIDIA driver.
+# This section runs only if the system is UEFI-enabled.
 if [ -d /sys/firmware/efi ]; then
 	if [[ ! -f /root/UEFI.der ]] || [[ ! -f /root/UEFI.der ]] ; then
 		openssl req -new -x509 -newkey rsa:2048 -keyout UEFI.key -outform DER -out UEFI.der -passin pass:$PASSWORD -nodes -days 36500 -subj "/CN=tirsvad_nvidia/"
@@ -47,7 +56,7 @@ if [ -d /sys/firmware/efi ]; then
 	fi
 fi
 
-# We need to reboot so key will be loaded. We making some boot up script that will be run onetime and deleted
+# @brief Create temporary script and service for installation step 1.
 cat <<EOT >> /usr/local/bin/runonetime-nvidia-installer-step-01.sh
 #!/bin/bash
 exec 3>&1 1>>/root/runonetime-nvidia-installer-step-01.log 2>&1
@@ -68,6 +77,7 @@ EOT
 
 chmod +x /usr/local/bin/runonetime-nvidia-installer-step-01.sh
 
+# @brief Create systemd service for installation step 1.
 cat <<EOT >> /etc/systemd/system/runonetime-nvidia-installer-step-01.service
 [Unit]
 Description=Simple one time run
@@ -102,6 +112,7 @@ EOT
 
 chmod +x /usr/local/bin/runonetime-nvidia-installer-step-02.sh
 
+# @brief Create systemd service for installation step 2.
 cat <<EOT >> /etc/systemd/system/runonetime-nvidia-installer-step-02.service
 [Unit]
 Description=Simple one time run
@@ -118,7 +129,7 @@ EOT
 
 chmod 644 /etc/systemd/system/runonetime-nvidia-installer-step-02.service
 
-# Disable graphical login and enable script at boot
+# @brief Enable the scripts to run at boot and set the default target.
 systemctl enable runonetime-nvidia-installer-step-01.service
 systemctl set-default multi-user.target
 systemctl daemon-reload
