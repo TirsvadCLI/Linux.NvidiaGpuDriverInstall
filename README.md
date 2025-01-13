@@ -4,18 +4,12 @@ This script automates the process of installing NVIDIA drivers on a Debian-based
 
 Follow the guide and it's instructions to download and install the NVIDIA driver, including support for systems with Secure Boot (UEFI). If you have an older NVIDIA card, you can switch to a compatible driver by modifying the value in the script at the top. 
 
-
-## Conventions
-
-- `#` – Indicates that the command requires root privileges. You can either run the command as the root user or prefix it with `sudo`.
-- `$` – Indicates that the command should be executed as a regular non-privileged user.
-
 ## Prerequisites
 
 Ensure that `cURL` is installed on your system. If it's not installed, you can do so using the following command:
 
 ```bash
-# apt -y install curl
+apt -y install curl
 ```
 
 ## Install
@@ -30,10 +24,11 @@ You can make changes in the config.sh file
 Login as root.  
 Download the script.  
 
-    # curl -L https://github.com/TirsvadCLI/Linux.NvidiaGpuDriverInstall/tarball/master | tar xz -C /root/ --strip-components=2
-
-    # cd cd /root/NvidiaGpuDriverInstall
-    # bash install.sh
+```bash
+curl -L https://github.com/TirsvadCLI/Linux.NvidiaGpuDriverInstall/tarball/master | tar xz -C /root/ --strip-components=2
+cd /root/NvidiaGpuDriverInstall
+bash install.sh
+```
 
 ### Post-Installation
 
